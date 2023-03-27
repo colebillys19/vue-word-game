@@ -70,6 +70,7 @@ export const VALID_KEYDOWN_CODES = {
   Backspace: true,
   Comma: true,
   Digit1: true,
+  Escape: true,
   KeyA: true,
   KeyB: true,
   KeyC: true,
@@ -111,6 +112,7 @@ export const EDGE_KEYDOWN_CODES = {
   ArrowRight: true,
   ArrowUp: true,
   Backspace: true,
+  Escape: true,
   Space: true,
 };
 

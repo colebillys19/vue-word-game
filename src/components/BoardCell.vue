@@ -2,7 +2,7 @@
 import { useBoardStore } from '@/stores/board'
 import { EDGE_KEYDOWN_CODES, ERASE_KEYDOWN_CODES, VALID_INPUT_CHARS, VALID_KEYDOWN_CODES } from '@/misc/constants'
 
-const props = defineProps(['cellIndices', 'modelValue'])
+const props = defineProps(['cellIndices', 'modelValue', 'navObj'])
 defineEmits(['update:modelValue'])
 
 const boardStore = useBoardStore();
@@ -23,7 +23,11 @@ const handleInput = (e) => {
   if (!VALID_INPUT_CHARS[e.data]) {
     e.preventDefault();
   } else {
-    console.log(e.data);
+    if (props.navObj.right) {
+      boardStore.setFocusedIndices(props.navObj.right);
+    } else {
+      boardStore.setFocusedIndices('');
+    }
   }
 }
 
@@ -37,22 +41,46 @@ const handleKeydown = (e) => {
     e.preventDefault();
     switch (e.code) {
       case 'ArrowDown':
-        // ...
+        if (props.navObj.down) {
+          boardStore.setFocusedIndices(props.navObj.down);
+        }
         break;
       case 'ArrowLeft':
-        // ...
+        if (props.navObj.left) {
+          boardStore.setFocusedIndices(props.navObj.left);
+        }
         break;
       case 'ArrowRight':
-        // ...
+        if (props.navObj.right) {
+          boardStore.setFocusedIndices(props.navObj.right);
+        }
         break;
       case 'ArrowUp':
-        // ...
+        if (props.navObj.up) {
+          boardStore.setFocusedIndices(props.navObj.up);
+        }
         break;
       case 'Backspace':
-        // ...
+        if (e.target.value) {
+          e.target.value = '';
+        } else if (props.navObj.left) {
+          boardStore.setFocusedIndices(props.navObj.left);
+        } else if (!props.navObj.left) {
+          boardStore.setFocusedIndices('');
+        }
+        break;
+      case 'Escape':
+        boardStore.setFocusedIndices('');
         break;
       case 'Space':
-        // ...
+        if (e.target.value) {
+          e.target.value = '';
+        }
+        if (props.navObj.right) {
+          boardStore.setFocusedIndices(props.navObj.right);
+        } else {
+          boardStore.setFocusedIndices('');
+        }
         break;
 }
     return;
@@ -66,7 +94,6 @@ const handleKeydown = (e) => {
   if (ERASE_KEYDOWN_CODES[e.code]) {
     e.target.value = '';
   }
-  // console.log(e);
 }
 </script>
 

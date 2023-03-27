@@ -11,6 +11,7 @@ defineProps(['rowData'])
       :key="cellData.id"
       v-model="cellData.val"
       :cell-indices="cellData.indices"
+      :nav-obj="cellData.navObj"
     />
   </div>
 </template>

@@ -7,6 +7,19 @@ import BoardBoard from './components/BoardBoard.vue'
 const boardStore = useBoardStore()
 const mainRef = ref(null)
 
+boardStore.$subscribe((mutation) => {
+  const { events: { key, newValue, oldValue } } = mutation;
+  if (key === 'focusedIndices') {
+    if (newValue[0] === -1) {
+      const targetCellInput = mainRef.value.querySelector(`[indices="${[oldValue[0], oldValue[1]].join('-')}"]`);
+      targetCellInput.blur();
+    } else {
+      const targetCellInput = mainRef.value.querySelector(`[indices="${[newValue[0], newValue[1]].join('-')}"]`);
+      targetCellInput.focus();
+    }
+  }
+})
+
 const handleMainClick = (target) => {
   if (target.tagName !== 'INPUT') {
     boardStore.setFocusedIndices('');
