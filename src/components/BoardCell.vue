@@ -18,29 +18,6 @@ const handleFocus = () => {
   }
 }
 
-const handleInput = (e) => {
-  if (e.inputType !== 'deleteContentBackward') {
-    boardStore.setLastInputIndices(props.cellIndices);
-  } else {
-    // stay in place
-  }
-}
-
-const handleKeyDown = (e) => {
-  if (![37, 38, 39, 40].includes(e.keyCode)) {
-    e.target.value = '';
-  }
-  if (e.keyCode === 32) {
-    e.preventDefault();
-    boardStore.setLastInputIndices(props.cellIndices);
-  }
-  // how to determine if the action is actually deleting a character or not
-  if (e.keyCode === 8) {
-    // delete keydown logic
-    console.log(e);
-  }
-}
-
 </script>
 
 <template>
@@ -51,7 +28,6 @@ const handleKeyDown = (e) => {
     :style="borderStyles"
     :value="modelValue"
     @focus="handleFocus()"
-    @input="$emit('update:modelValue', $event.target.value); handleInput($event)"
-    @keydown="handleKeyDown($event)"
+    @input="$emit('update:modelValue', $event.target.value)"
   />
 </template>
