@@ -8,21 +8,27 @@ const boardStore = useBoardStore()
 const mainRef = ref(null)
 
 boardStore.$subscribe((mutation) => {
-  const { events: { key, newValue, oldValue } } = mutation;
+  const {
+    events: { key, newValue, oldValue }
+  } = mutation
   if (key === 'focusedIndices') {
     if (newValue[0] > -1) {
-      const targetCellInput = mainRef.value.querySelector(`[indices="${[newValue[0], newValue[1]].join('-')}"]`);
-      targetCellInput.focus();
+      const targetCellInput = mainRef.value.querySelector(
+        `[indices="${[newValue[0], newValue[1]].join('-')}"]`
+      )
+      targetCellInput.focus()
     } else if (oldValue[0] > -1) {
-      const targetCellInput = mainRef.value.querySelector(`[indices="${[oldValue[0], oldValue[1]].join('-')}"]`);
-      targetCellInput.blur();
+      const targetCellInput = mainRef.value.querySelector(
+        `[indices="${[oldValue[0], oldValue[1]].join('-')}"]`
+      )
+      targetCellInput.blur()
     }
   }
 })
 
 const handleMainClick = (target) => {
   if (target.tagName !== 'INPUT') {
-    boardStore.setFocusedIndices('');
+    boardStore.setFocusedIndices('')
   }
 }
 </script>
@@ -34,11 +40,11 @@ const handleMainClick = (target) => {
 </template>
 
 <style scoped>
-  main {
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-    padding-top: 24px;
-  }
+main {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  padding-top: 24px;
+}
 </style>

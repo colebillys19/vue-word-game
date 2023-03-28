@@ -2,11 +2,11 @@
 // export const INVALID_KEY_CODES = [8, 37, 38, 39, 40];
 
 export const VALID_INPUT_CHARS = {
-  "-": true,
-  ",": true,
-  "!": true,
-  "?": true,
-  ".": true,
+  '-': true,
+  ',': true,
+  '!': true,
+  '?': true,
+  '.': true,
   "'": true,
   a: true,
   A: true,
@@ -59,8 +59,8 @@ export const VALID_INPUT_CHARS = {
   y: true,
   Y: true,
   z: true,
-  Z: true,
-};
+  Z: true
+}
 
 export const VALID_KEYDOWN_CODES = {
   ArrowDown: true,
@@ -104,8 +104,8 @@ export const VALID_KEYDOWN_CODES = {
   ShiftRight: true,
   Slash: true,
   Space: true,
-  Tab: true,
-};
+  Tab: true
+}
 
 export const EDGE_KEYDOWN_CODES = {
   ArrowDown: true,
@@ -114,8 +114,8 @@ export const EDGE_KEYDOWN_CODES = {
   ArrowUp: true,
   Backspace: true,
   Escape: true,
-  Space: true,
-};
+  Space: true
+}
 
 export const ERASE_KEYDOWN_CODES = {
   Comma: true,
@@ -149,5 +149,5 @@ export const ERASE_KEYDOWN_CODES = {
   Minus: true,
   Period: true,
   Quote: true,
-  Slash: true,
-};
+  Slash: true
+}
