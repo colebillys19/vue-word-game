@@ -16,16 +16,38 @@ body {
 }
 
 input {
-  border-color: #aaa;
+  border-bottom: 1px solid rgba(248, 89, 0, 0.2);
   border-left: none;
   border-radius: 0;
+  border-right: 1px solid rgba(248, 89, 0, 0.2);
   border-top: none;
-  border-width: 1px;
+  color: transparent;
   font-family: monospace;
   font-size: 16px;
   height: 24px;
   outline: none;
   padding: 0;
   text-align: center;
+  text-shadow: 0 0 0 royalblue;
   width: 24px;
+}
+
+input:focus + span {
+  border: 2px solid royalblue !important;
+  box-shadow: 0 0 24px rgba(248, 89, 0, 0.3);
+  height: 25px;
+  left: -1px;
+  pointer-events: none;
+  position: absolute;
+  top: -4px;
+  width: 25px;
+  z-index: 1;
+}
+
+input:hover:not(:focus) {
+  background-color: rgba(248, 89, 0, 0.2);
+}
+
+#anchor {
+  position: relative;
 }

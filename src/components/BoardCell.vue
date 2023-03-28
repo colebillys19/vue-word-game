@@ -145,27 +145,3 @@ const handleKeydown = (e) => {
     <span />
   </span>
 </template>
-
-<style scoped>
-input {
-  color: transparent;
-  text-shadow: 0 0 0 #000;
-}
-/* input:focus {
-  background-color: lightcyan;
-} */
-#anchor {
-  position: relative;
-}
-input:focus + span {
-  border: 1px solid black !important;
-  box-shadow: 0 0 48px lightskyblue;
-  height: 25px;
-  left: -1px;
-  pointer-events: none;
-  position: absolute;
-  top: -4px;
-  width: 25px;
-  z-index: 1;
-}
-</style>
