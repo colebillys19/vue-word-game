@@ -60,15 +60,43 @@ const handleKeydown = (e) => {
           boardStore.setFocusedIndices(props.navObj.up);
         }
         break;
-      case 'Backspace':
-        if (e.target.value) {
-          e.target.value = '';
-        } else if (props.navObj.left) {
-          boardStore.setFocusedIndices(props.navObj.left);
-        } else if (!props.navObj.left) {
-          boardStore.setFocusedIndices('');
+      case 'Backspace': {
+        if (e.shiftKey) {
+          if (e.target.value) {
+            e.target.value = '';
+            if (props.navObj.left) {
+              // shft | content | left
+              boardStore.setFocusedIndices(props.navObj.left);
+            } else {
+              // shft | content | no left
+              boardStore.setFocusedIndices('');
+            }
+          } else {
+            if (props.navObj.left) {
+              // shft | no content | left
+              boardStore.setFocusedIndices(props.navObj.left);
+            } else {
+              // shft | no content | no left
+              boardStore.setFocusedIndices('');
+            }
+          }
+        } else {
+          if (e.target.value) {
+            // no shift | content | left
+            // no shift | content | no left
+            e.target.value = '';
+          } else {
+            if (props.navObj.left) {
+              // no shift | no content | left
+              boardStore.setFocusedIndices(props.navObj.left);
+            } else {
+              // no shift | no content | no left
+              boardStore.setFocusedIndices('');
+            }
+          }
         }
         break;
+      }
       case 'Escape':
         boardStore.setFocusedIndices('');
         break;

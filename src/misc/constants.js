@@ -104,6 +104,7 @@ export const VALID_KEYDOWN_CODES = {
   ShiftRight: true,
   Slash: true,
   Space: true,
+  Tab: true,
 };
 
 export const EDGE_KEYDOWN_CODES = {
