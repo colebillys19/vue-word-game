@@ -25,9 +25,13 @@ const handleFocus = () => {
 }
 
 const handleInput = (e) => {
+  // ???
+  // !boardStore.colCharBanks[parseInt(props.cellIndices.split('-')[1])][e.data.toLowerCase()]
   if (!VALID_INPUT_CHARS[e.data]) {
     e.preventDefault()
   } else {
+    // TODO: if valid input && true in bank
+    boardStore.setCharBankValue(parseInt(props.cellIndices.split('-')[1]), e.data, false);
     if (props.navObj.right) {
       boardStore.setFocusedIndices(props.navObj.right)
     } else {
@@ -68,6 +72,8 @@ const handleKeydown = (e) => {
       case 'Backspace': {
         if (e.shiftKey) {
           if (e.target.value) {
+            // update bank and delete
+            boardStore.setCharBankValue(parseInt(props.cellIndices.split('-')[1]), e.target.value, true)
             e.target.value = ''
             if (props.navObj.left) {
               // shft | content | left
@@ -89,6 +95,8 @@ const handleKeydown = (e) => {
           if (e.target.value) {
             // no shift | content | left
             // no shift | content | no left
+            // update bank and delete
+            boardStore.setCharBankValue(parseInt(props.cellIndices.split('-')[1]), e.target.value, true)
             e.target.value = ''
           } else {
             if (props.navObj.left) {
@@ -107,6 +115,8 @@ const handleKeydown = (e) => {
         break
       case 'Space':
         if (e.target.value) {
+          // update bank and delete
+          boardStore.setCharBankValue(parseInt(props.cellIndices.split('-')[1]), e.target.value, true)
           e.target.value = ''
         }
         if (props.navObj.right) {
@@ -124,7 +134,9 @@ const handleKeydown = (e) => {
     return
   }
   // if a valid character is entered, allow new char to overwrite old one
-  if (ERASE_KEYDOWN_CODES[e.code]) {
+  if (ERASE_KEYDOWN_CODES[e.code] && e.target.value) {
+    // update bank and delete
+    boardStore.setCharBankValue(parseInt(props.cellIndices.split('-')[1]), e.target.value, true)
     e.target.value = ''
   }
 }

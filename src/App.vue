@@ -41,10 +41,10 @@ const handleMainClick = (target) => {
 
 <style scoped>
 main {
-  height: 100vh;
-  width: 100vw;
   display: flex;
+  height: 100vh;
   justify-content: center;
   padding-top: 24px;
+  width: 100vw;
 }
 </style>
