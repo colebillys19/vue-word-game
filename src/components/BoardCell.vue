@@ -14,6 +14,7 @@ const boardStore = useBoardStore()
 
 const isLastRow = props.cellIndices.includes('25-')
 const isLastInRow = props.cellIndices.includes('-25')
+// col color logic?
 const borderStyles = `${isLastRow ? 'border-bottom: none;' : ''} ${
   isLastInRow ? 'border-right: none;' : ''
 }`
