@@ -1,4 +1,5 @@
 <script setup>
+import { computed } from 'vue'
 import { useBoardStore } from '@/stores/board'
 import {
   EDGE_KEYDOWN_CODES,
@@ -11,13 +12,9 @@ const props = defineProps(['cellIndices', 'modelValue', 'navObj'])
 defineEmits(['update:modelValue'])
 
 const boardStore = useBoardStore()
-
 const isLastRow = props.cellIndices.includes('25-')
-const isLastInRow = props.cellIndices.includes('-25')
-// col color logic?
-const borderStyles = `${isLastRow ? 'border-bottom: none;' : ''} ${
-  isLastInRow ? 'border-right: none;' : ''
-}`
+const isLastCell = props.cellIndices.includes('-25')
+const noFocus = computed(() => boardStore.focusedIndices[0] === -1)
 
 const handleFocus = () => {
   if ([...boardStore.focusedIndices].join('-') !== props.cellIndices) {
@@ -148,6 +145,7 @@ const handleKeydown = (e) => {
     <input
       maxlength="1"
       type="text"
+      :class="{ 'last-row': isLastRow, 'last-cell': isLastCell, 'no-focus': noFocus }"
       :indices="cellIndices"
       :style="borderStyles"
       :value="modelValue"
@@ -158,3 +156,50 @@ const handleKeydown = (e) => {
     <span />
   </span>
 </template>
+
+<style scoped>
+input {
+  border-bottom: 1px solid rgba(248, 89, 0, 0.3);
+  border-left: none;
+  border-radius: 0;
+  border-right: 1px solid rgba(248, 89, 0, 0.3);
+  border-top: none;
+  color: transparent;
+  cursor: default;
+  font-family: monospace;
+  font-size: 16px;
+  height: 24px;
+  outline: none;
+  padding: 0;
+  text-align: center;
+  text-shadow: 0 0 0 rgba(65, 105, 225, 1);
+  width: 24px;
+}
+
+input:focus + span {
+  border: 2px solid rgba(65, 105, 225, 1) !important;
+  height: 25px;
+  left: -1px;
+  pointer-events: none;
+  position: absolute;
+  top: -4px;
+  width: 25px;
+  z-index: 1;
+}
+
+#anchor {
+  position: relative;
+}
+
+.last-row {
+  border-bottom: none;
+}
+
+.last-cell {
+  border-right: none;
+}
+
+.no-focus:hover:not(:focus) {
+  background-color: rgba(248, 89, 0, 0.3);
+}
+</style>
