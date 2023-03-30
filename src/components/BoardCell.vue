@@ -7,7 +7,7 @@ import {
   VALID_KEYDOWN_CODES
 } from '@/misc/constants'
 
-const props = defineProps(['cellIndices', 'modelValue', 'navObj'])
+const props = defineProps(['cellIndices', 'colCharBanks', 'modelValue', 'navObj'])
 defineEmits(['update:modelValue'])
 
 const boardStore = useBoardStore()
@@ -128,6 +128,11 @@ const handleKeydown = (e) => {
     e.preventDefault()
     return
   }
+  // prevent input if char already used in column
+  if (!props.colCharBanks[parseInt(props.cellIndices.split('-')[1])][e.key.toLowerCase()]) {
+    e.preventDefault()
+    return
+  }
   // if a valid character is entered, allow new char to overwrite old one
   if (ERASE_KEYDOWN_CODES[e.code] && e.target.value) {
     // update bank and delete
@@ -184,10 +189,6 @@ input:focus + span {
   z-index: 1;
 }
 
-/* input:hover:not(:focus) {
-  background-color: rgba(248, 89, 0, 0.3);
-} */
-
 #anchor {
   position: relative;
 }
@@ -199,6 +200,10 @@ input:focus + span {
 .last-cell {
   border-right: none;
 }
+
+/* input:hover:not(:focus) {
+  background-color: rgba(248, 89, 0, 0.3);
+} */
 
 /* .no-focus:hover:not(:focus) {
   background-color: rgba(248, 89, 0, 0.3);

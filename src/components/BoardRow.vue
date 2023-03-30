@@ -1,7 +1,7 @@
 <script setup>
 import BoardCell from './BoardCell.vue'
 
-defineProps(['rowData'])
+defineProps(['colCharBanks', 'rowData'])
 </script>
 
 <template>
@@ -11,6 +11,7 @@ defineProps(['rowData'])
       :key="cellData.id"
       v-model="cellData.val"
       :cell-indices="cellData.indices"
+      :col-char-banks="colCharBanks"
       :nav-obj="cellData.navObj"
     />
   </div>

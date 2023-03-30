@@ -10,7 +10,12 @@ const boardStore = useBoardStore()
 
 <template>
   <section>
-    <BoardRow v-for="row in boardStore.board" :key="row.id" :row-data="row.data" />
+    <BoardRow
+      v-for="row in boardStore.board"
+      :key="row.id"
+      :row-data="row.data"
+      :col-char-banks="boardStore.colCharBanks"
+    />
     <CharBank />
     <ColumnIndicators />
   </section>
