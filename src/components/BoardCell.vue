@@ -123,8 +123,34 @@ const handleKeydown = (e) => {
     }
     return
   }
+  console.log(e.code);
   // prevent 1 from being entered
   if (e.code === 'Digit1' && !e.shiftKey) {
+    e.preventDefault()
+    return
+  }
+  // prevent _ from being entered
+  if (e.code === 'Minus' && e.shiftKey) {
+    e.preventDefault()
+    return
+  }
+  // prevent " from being entered
+  if (e.code === 'Quote' && e.shiftKey) {
+    e.preventDefault()
+    return
+  }
+  // prevent < from being entered
+  if (e.code === 'Comma' && e.shiftKey) {
+    e.preventDefault()
+    return
+  }
+  // prevent > from being entered
+  if (e.code === 'Period' && e.shiftKey) {
+    e.preventDefault()
+    return
+  }
+  // prevent / from being entered
+  if (e.code === 'Slash' && !e.shiftKey) {
     e.preventDefault()
     return
   }
