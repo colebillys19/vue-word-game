@@ -3,6 +3,7 @@ import { useBoardStore } from '@/stores/board'
 
 import BoardRow from './BoardRow.vue'
 import CharBank from './CharBank.vue'
+import ColumnIndicators from './ColumnIndicators.vue'
 
 const boardStore = useBoardStore()
 </script>
@@ -11,6 +12,7 @@ const boardStore = useBoardStore()
   <section>
     <BoardRow v-for="row in boardStore.board" :key="row.id" :row-data="row.data" />
     <CharBank />
+    <ColumnIndicators />
   </section>
 </template>
 

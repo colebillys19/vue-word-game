@@ -33,11 +33,13 @@ const activeBankComputed = computed(() => {
   }
   return [];
 })
-console.log(activeBankComputed)
+
+const isVisible = computed(() => boardStore.focusedIndices[0] > -1)
+const isFocusedRight = computed(() => boardStore.focusedIndices[1] > 12)
 </script>
 
 <template>
-  <div id="container">
+  <div class="container" :id="isVisible ? 'isVisible' : 'isHidden'" :style="isFocusedRight ? 'left: -48px;' : 'right: -48px;'">
     <div v-for="rowsData in activeBankComputed" :key="rowsData.key">
       <span v-for="lilArr in rowsData.data" :key="lilArr[0]" :style="lilArr[1]">{{ lilArr[0] }}</span>
     </div>
@@ -45,22 +47,29 @@ console.log(activeBankComputed)
 </template>
 
 <style scoped>
-#container {
+span:not(:last-of-type) {
+  margin-right: 8px;
+}
+
+#isVisible {
+  display: flex;
+}
+
+.container {
   align-items: center;
   background-color: white;
   color: rgb(65, 105, 225);
-  display: flex;
+  display: none;
   flex-direction: column;
   font-family: monospace;
   font-size: 16px;
   height: 170px;
   justify-content: center;
-  left: 0;
   outline: 3px solid black;
   padding: 12px;
   pointer-events: none;
   position: absolute;
-  top: 0;
+  top: 48px;
   width: 200px;
   z-index: 2;
 }
