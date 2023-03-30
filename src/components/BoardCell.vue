@@ -161,10 +161,10 @@ const handleKeydown = (e) => {
 <style scoped>
 input {
   background-color: transparent;
-  border-bottom: 1px solid rgba(248, 89, 0, 0.3);
+  border-bottom: 1px solid rgba(100, 138, 180, 0.3);
   border-left: none;
   border-radius: 0;
-  border-right: 1px solid rgba(248, 89, 0, 0.3);
+  border-right: 1px solid rgba(100, 138, 180, 0.3);
   border-top: none;
   color: transparent;
   cursor: default;
@@ -174,12 +174,12 @@ input {
   outline: none;
   padding: 0;
   text-align: center;
-  text-shadow: 0 0 0 rgba(65, 105, 225, 1);
+  text-shadow: 0 0 0 rgba(0, 0, 0, 1);
   width: 24px;
 }
 
 input:focus + span {
-  border: 2px solid rgba(65, 105, 225, 1) !important;
+  border: 2px solid rgba(0, 0, 0, 1) !important;
   height: 25px;
   left: -1px;
   pointer-events: none;

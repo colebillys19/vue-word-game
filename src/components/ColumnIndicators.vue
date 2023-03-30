@@ -31,7 +31,7 @@ div {
 }
 
 span {
-  background-color: rgba(248, 89, 0, 0.1);
+  background-color: rgba(100, 138, 180, 0.1);
   display: inline-block;
   height: 624px;
   width: 23px;
