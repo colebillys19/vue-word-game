@@ -33,8 +33,8 @@ div {
 span {
   background-color: rgba(100, 138, 180, 0.1);
   display: inline-block;
-  height: 624px;
-  width: 23px;
+  height: 572px;
+  width: 21px;
 }
 
 span:not(:last-of-type) {

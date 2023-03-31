@@ -123,7 +123,6 @@ const handleKeydown = (e) => {
     }
     return
   }
-  console.log(e.code);
   // prevent 1 from being entered
   if (e.code === 'Digit1' && !e.shiftKey) {
     e.preventDefault()
@@ -154,8 +153,9 @@ const handleKeydown = (e) => {
     e.preventDefault()
     return
   }
+  //
   // prevent input if char already used in column
-  if (!props.colCharBanks[parseInt(props.cellIndices.split('-')[1])][e.key.toLowerCase()]) {
+  if (e.key.toLowerCase() !== e.target.value.toLowerCase() && !props.colCharBanks[parseInt(props.cellIndices.split('-')[1])][e.key.toLowerCase()]) {
     e.preventDefault()
     return
   }
@@ -169,19 +169,16 @@ const handleKeydown = (e) => {
 </script>
 
 <template>
-  <span id="anchor">
-    <input
-      maxlength="1"
-      type="text"
-      :class="{ 'last-row':isLastRow, 'last-cell': isLastCell }"
-      :indices="cellIndices"
-      :value="modelValue"
-      @focus="handleFocus()"
-      @input="$emit('update:modelValue', $event.target.value); handleInput($event)"
-      @keydown="handleKeydown($event)"
-    />
-    <span />
-  </span>
+  <input
+    maxlength="1"
+    type="text"
+    :class="{ 'last-row':isLastRow, 'last-cell': isLastCell }"
+    :indices="cellIndices"
+    :value="modelValue"
+    @focus="handleFocus()"
+    @input="$emit('update:modelValue', $event.target.value); handleInput($event)"
+    @keydown="handleKeydown($event)"
+  />
 </template>
 
 <style scoped>
@@ -196,23 +193,18 @@ input {
   cursor: default;
   font-family: monospace;
   font-size: 16px;
-  height: 24px;
+  height: 22px;
   outline: none;
   padding: 0;
   text-align: center;
   text-shadow: 0 0 0 rgba(0, 0, 0, 1);
-  width: 24px;
+  width: 22px;
 }
 
-input:focus + span {
-  border: 2px solid rgba(0, 0, 0, 1) !important;
-  height: 25px;
-  left: -1px;
-  pointer-events: none;
-  position: absolute;
-  top: -4px;
-  width: 25px;
-  z-index: 1;
+input:focus {
+  background-color: white;
+  border-bottom: 1px solid rgb(100, 138, 180);
+  border-right: 1px solid rgb(100, 138, 180);
 }
 
 #anchor {

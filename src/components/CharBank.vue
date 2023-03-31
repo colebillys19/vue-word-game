@@ -9,7 +9,7 @@ const activeBankComputed = computed(() => {
     const activeBank = boardStore.colCharBanks[boardStore.focusedIndices[1]]
     const activeBankEntries = Object.keys(activeBank)
       .map((char) => [char, activeBank[char] ?
-        'color: rgb(0, 0, 0);' : 'color: rgba(100, 138, 180, 0.3);'])
+        'color: rgb(0, 0, 0);' : 'color: rgba(100, 138, 180, 0.1);'])
     let counterA = 0;
     return [2, 4, 6, 8, 6, 4, 2].map((rowCount, i) => {
       let counterB = 0;
