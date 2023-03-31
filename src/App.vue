@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue'
-
 import { useBoardStore } from './stores/board'
 import BoardBoard from './components/BoardBoard.vue'
 
@@ -9,26 +8,22 @@ const mainRef = ref(null)
 
 boardStore.$subscribe((mutation) => {
   const {
-    events: { key, newValue, oldValue }
+    events: { key, newValue }
   } = mutation
-  if (key === 'focusedIndices') {
-    if (newValue[0] > -1) {
+  if (key === 'focusedY') {
+    if (newValue > -1) {
       const targetCellInput = mainRef.value.querySelector(
-        `[indices="${[newValue[0], newValue[1]].join('-')}"]`
+        `[indices="${boardStore.focusedX}-${newValue}"]`
       )
       targetCellInput.focus()
-    } else if (oldValue[0] > -1) {
-      const targetCellInput = mainRef.value.querySelector(
-        `[indices="${[oldValue[0], oldValue[1]].join('-')}"]`
-      )
-      targetCellInput.blur()
     }
   }
 })
 
 const handleMainClick = (target) => {
-  if (target.tagName !== 'INPUT') {
-    boardStore.setFocusedIndices('')
+  if (target.tagName !== 'INPUT' && boardStore.focusedX > -1) {
+    boardStore.setFocusedX(-1)
+    boardStore.setFocusedY(-1)
   }
 }
 </script>

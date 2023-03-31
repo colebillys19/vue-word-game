@@ -6,7 +6,7 @@ const boardStore = useBoardStore()
 
 const indicatorDataArr = computed(() =>
   new Array(26).fill().map((v, i) => ({
-    isVisible: boardStore.focusedIndices[1] === i,
+    isVisible: boardStore.focusedX === i,
     key: String.fromCharCode(i + 97)
   }))
 )

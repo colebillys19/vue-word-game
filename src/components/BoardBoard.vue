@@ -6,14 +6,19 @@ import CharBank from './CharBank.vue'
 import ColumnIndicators from './ColumnIndicators.vue'
 
 const boardStore = useBoardStore()
+
+const handleClick = (e) => {
+  e.stopPropagation()
+}
 </script>
 
 <template>
-  <section>
+  <section @click="handleClick($event)">
     <BoardRow
-      v-for="row in boardStore.board"
+      v-for="(row, i) in boardStore.board"
       :key="row.id"
       :row-data="row.data"
+      :row-index="i"
       :col-char-banks="boardStore.colCharBanks"
     />
     <CharBank />

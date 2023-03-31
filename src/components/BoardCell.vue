@@ -7,18 +7,24 @@ import {
   VALID_KEYDOWN_CODES
 } from '@/misc/constants'
 
-const props = defineProps(['cellIndices', 'colCharBanks', 'modelValue', 'navObj'])
+const props = defineProps(['cellX', 'cellY', 'colCharBanks', 'modelValue', 'navObj'])
 defineEmits(['update:modelValue'])
 
 const boardStore = useBoardStore()
 
-const isLastRow = props.cellIndices.includes('25-')
-const isLastCell = props.cellIndices.includes('-25')
-const cellIndex = parseInt(props.cellIndices.split('-')[1]);
+const isLastRow = props.cellY === 25
+const isLastCell = props.cellX === 25
+
+const handleClick = (e) => {
+  e.stopPropagation()
+}
 
 const handleFocus = () => {
-  if ([...boardStore.focusedIndices].join('-') !== props.cellIndices) {
-    boardStore.setFocusedIndices(props.cellIndices)
+  if (boardStore.focusedX !== props.cellX) {
+    boardStore.setFocusedX(props.cellX)
+  }
+  if (boardStore.focusedY !== props.cellY) {
+    boardStore.setFocusedY(props.cellY)
   }
 }
 
@@ -27,11 +33,12 @@ const handleInput = (e) => {
     e.preventDefault()
   } else {
     // TODO: if valid input && true in bank
-    boardStore.setCharBankValue(cellIndex, e.data, false);
+    boardStore.setCharBankValue(props.cellX, e.data, false);
     if (props.navObj.right) {
-      boardStore.setFocusedIndices(props.navObj.right)
+      boardStore.setFocusedX(props.navObj.right)
     } else {
-      boardStore.setFocusedIndices('')
+      boardStore.setFocusedX(-1)
+      boardStore.setFocusedY(-1)
     }
   }
 }
@@ -47,44 +54,46 @@ const handleKeydown = (e) => {
     switch (e.code) {
       case 'ArrowDown':
         if (props.navObj.down) {
-          boardStore.setFocusedIndices(props.navObj.down)
+          boardStore.setFocusedY(props.navObj.down)
         }
         break
       case 'ArrowLeft':
         if (props.navObj.left) {
-          boardStore.setFocusedIndices(props.navObj.left)
+          boardStore.setFocusedX(props.navObj.left)
         }
         break
       case 'ArrowRight':
         if (props.navObj.right) {
-          boardStore.setFocusedIndices(props.navObj.right)
+          boardStore.setFocusedX(props.navObj.right)
         }
         break
       case 'ArrowUp':
         if (props.navObj.up) {
-          boardStore.setFocusedIndices(props.navObj.up)
+          boardStore.setFocusedY(props.navObj.up)
         }
         break
       case 'Backspace': {
         if (e.shiftKey) {
           if (e.target.value) {
             // update bank and delete
-            boardStore.setCharBankValue(cellIndex, e.target.value, true)
+            boardStore.setCharBankValue(props.cellX, e.target.value, true)
             e.target.value = ''
             if (props.navObj.left) {
               // shft | content | left
-              boardStore.setFocusedIndices(props.navObj.left)
+              boardStore.setFocusedX(props.navObj.left)
             } else {
               // shft | content | no left
-              boardStore.setFocusedIndices('')
+              boardStore.setFocusedX(-1)
+              boardStore.setFocusedY(-1)
             }
           } else {
             if (props.navObj.left) {
               // shft | no content | left
-              boardStore.setFocusedIndices(props.navObj.left)
+              boardStore.setFocusedX(props.navObj.left)
             } else {
               // shft | no content | no left
-              boardStore.setFocusedIndices('')
+              boardStore.setFocusedX(-1)
+              boardStore.setFocusedY(-1)
             }
           }
         } else {
@@ -92,33 +101,36 @@ const handleKeydown = (e) => {
             // no shift | content | left
             // no shift | content | no left
             // update bank and delete
-            boardStore.setCharBankValue(cellIndex, e.target.value, true)
+            boardStore.setCharBankValue(props.cellX, e.target.value, true)
             e.target.value = ''
           } else {
             if (props.navObj.left) {
               // no shift | no content | left
-              boardStore.setFocusedIndices(props.navObj.left)
+              boardStore.setFocusedX(props.navObj.left)
             } else {
               // no shift | no content | no left
-              boardStore.setFocusedIndices('')
+              boardStore.setFocusedX(-1)
+              boardStore.setFocusedY(-1)
             }
           }
         }
         break
       }
       case 'Escape':
-        boardStore.setFocusedIndices('')
+        boardStore.setFocusedX(-1)
+        boardStore.setFocusedY(-1)
         break
       case 'Space':
         if (e.target.value) {
           // update bank and delete
-          boardStore.setCharBankValue(cellIndex, e.target.value, true)
+          boardStore.setCharBankValue(props.cellX, e.target.value, true)
           e.target.value = ''
         }
         if (props.navObj.right) {
-          boardStore.setFocusedIndices(props.navObj.right)
+          boardStore.setFocusedX(props.navObj.right)
         } else {
-          boardStore.setFocusedIndices('')
+          boardStore.setFocusedX(-1)
+          boardStore.setFocusedY(-1)
         }
         break
     }
@@ -137,14 +149,14 @@ const handleKeydown = (e) => {
     return
   }
   // prevent input if char already used in column
-  if (e.key.toLowerCase() !== e.target.value.toLowerCase() && !props.colCharBanks[cellIndex][e.key.toLowerCase()]) {
+  if (e.key.toLowerCase() !== e.target.value.toLowerCase() && !props.colCharBanks[props.cellX][e.key.toLowerCase()]) {
     e.preventDefault()
     return
   }
   // if a valid character is entered, allow new char to overwrite old one
   if (ERASE_KEYDOWN_CODES[e.code] && e.target.value) {
     // update bank and delete
-    boardStore.setCharBankValue(cellIndex, e.target.value, true)
+    boardStore.setCharBankValue(props.cellX, e.target.value, true)
     e.target.value = ''
   }
 }
@@ -155,9 +167,10 @@ const handleKeydown = (e) => {
     maxlength="1"
     type="text"
     :class="{ 'last-row':isLastRow, 'last-cell': isLastCell }"
-    :indices="cellIndices"
+    :indices="`${cellX}-${cellY}`"
     :value="modelValue"
-    @focus="handleFocus()"
+    @click="handleClick($event)"
+    @focus="handleFocus($event)"
     @input="$emit('update:modelValue', $event.target.value); handleInput($event)"
     @keydown="handleKeydown($event)"
   />

@@ -5,8 +5,8 @@ import { useBoardStore } from '@/stores/board'
 const boardStore = useBoardStore()
 
 const activeBankComputed = computed(() => {
-  if (boardStore.focusedIndices[1] > -1) {
-    const activeBank = boardStore.colCharBanks[boardStore.focusedIndices[1]]
+  if (boardStore.focusedX > -1) {
+    const activeBank = boardStore.colCharBanks[boardStore.focusedX]
     const activeBankEntries = Object.keys(activeBank)
       .map((char) => [char, activeBank[char] ?
         'color: rgb(0, 0, 0);' : 'color: rgba(100, 138, 180, 0.1);'])
@@ -25,13 +25,13 @@ const activeBankComputed = computed(() => {
   return [];
 })
 
-const isVisible = computed(() => boardStore.focusedIndices[0] > -1)
-const isFocusedRight = computed(() => boardStore.focusedIndices[1] > 12)
+const isVisible = computed(() => boardStore.focusedY > -1)
+const isFocusedRight = computed(() => boardStore.focusedX > 12)
 </script>
 
 <template>
   <div class="container" :id="isVisible ? 'isVisible' : 'isHidden'" :style="isFocusedRight ? 'left: -96px;' : 'right: -96px;'">
-    <h1>{{ `Column ${boardStore.focusedIndices[1] + 1}` }}</h1>
+    <h1>{{ `Column ${boardStore.focusedX + 1}` }}</h1>
     <div v-for="rowsData in activeBankComputed" :key="rowsData.key">
       <span v-for="lilArr in rowsData.data" :key="lilArr[0]" :style="lilArr[1]">{{ lilArr[0] }}</span>
     </div>
