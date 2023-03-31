@@ -14,6 +14,7 @@ const boardStore = useBoardStore()
 
 const isLastRow = props.cellIndices.includes('25-')
 const isLastCell = props.cellIndices.includes('-25')
+const cellIndex = parseInt(props.cellIndices.split('-')[1]);
 
 const handleFocus = () => {
   if ([...boardStore.focusedIndices].join('-') !== props.cellIndices) {
@@ -26,7 +27,7 @@ const handleInput = (e) => {
     e.preventDefault()
   } else {
     // TODO: if valid input && true in bank
-    boardStore.setCharBankValue(parseInt(props.cellIndices.split('-')[1]), e.data, false);
+    boardStore.setCharBankValue(cellIndex, e.data, false);
     if (props.navObj.right) {
       boardStore.setFocusedIndices(props.navObj.right)
     } else {
@@ -68,7 +69,7 @@ const handleKeydown = (e) => {
         if (e.shiftKey) {
           if (e.target.value) {
             // update bank and delete
-            boardStore.setCharBankValue(parseInt(props.cellIndices.split('-')[1]), e.target.value, true)
+            boardStore.setCharBankValue(cellIndex, e.target.value, true)
             e.target.value = ''
             if (props.navObj.left) {
               // shft | content | left
@@ -91,7 +92,7 @@ const handleKeydown = (e) => {
             // no shift | content | left
             // no shift | content | no left
             // update bank and delete
-            boardStore.setCharBankValue(parseInt(props.cellIndices.split('-')[1]), e.target.value, true)
+            boardStore.setCharBankValue(cellIndex, e.target.value, true)
             e.target.value = ''
           } else {
             if (props.navObj.left) {
@@ -111,7 +112,7 @@ const handleKeydown = (e) => {
       case 'Space':
         if (e.target.value) {
           // update bank and delete
-          boardStore.setCharBankValue(parseInt(props.cellIndices.split('-')[1]), e.target.value, true)
+          boardStore.setCharBankValue(cellIndex, e.target.value, true)
           e.target.value = ''
         }
         if (props.navObj.right) {
@@ -123,46 +124,27 @@ const handleKeydown = (e) => {
     }
     return
   }
-  // prevent 1 from being entered
-  if (e.code === 'Digit1' && !e.shiftKey) {
+  // prevent shift/non-shift characters
+  if (
+    (e.code === 'Digit1' && !e.shiftKey) ||
+    (e.code === 'Minus' && e.shiftKey) ||
+    (e.code === 'Quote' && e.shiftKey) ||
+    (e.code === 'Comma' && e.shiftKey) ||
+    (e.code === 'Period' && e.shiftKey) ||
+    (e.code === 'Slash' && !e.shiftKey)
+  ) {
     e.preventDefault()
     return
   }
-  // prevent _ from being entered
-  if (e.code === 'Minus' && e.shiftKey) {
-    e.preventDefault()
-    return
-  }
-  // prevent " from being entered
-  if (e.code === 'Quote' && e.shiftKey) {
-    e.preventDefault()
-    return
-  }
-  // prevent < from being entered
-  if (e.code === 'Comma' && e.shiftKey) {
-    e.preventDefault()
-    return
-  }
-  // prevent > from being entered
-  if (e.code === 'Period' && e.shiftKey) {
-    e.preventDefault()
-    return
-  }
-  // prevent / from being entered
-  if (e.code === 'Slash' && !e.shiftKey) {
-    e.preventDefault()
-    return
-  }
-  //
   // prevent input if char already used in column
-  if (e.key.toLowerCase() !== e.target.value.toLowerCase() && !props.colCharBanks[parseInt(props.cellIndices.split('-')[1])][e.key.toLowerCase()]) {
+  if (e.key.toLowerCase() !== e.target.value.toLowerCase() && !props.colCharBanks[cellIndex][e.key.toLowerCase()]) {
     e.preventDefault()
     return
   }
   // if a valid character is entered, allow new char to overwrite old one
   if (ERASE_KEYDOWN_CODES[e.code] && e.target.value) {
     // update bank and delete
-    boardStore.setCharBankValue(parseInt(props.cellIndices.split('-')[1]), e.target.value, true)
+    boardStore.setCharBankValue(cellIndex, e.target.value, true)
     e.target.value = ''
   }
 }
