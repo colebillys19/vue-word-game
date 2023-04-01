@@ -149,7 +149,7 @@ const handleKeydown = (e) => {
     return
   }
   // prevent input if char already used in column
-  if (e.key.toLowerCase() !== e.target.value.toLowerCase() && !props.colCharBanks[props.cellX][e.key.toLowerCase()]) {
+  if (VALID_INPUT_CHARS[e.key] && e.key.toLowerCase() !== e.target.value.toLowerCase() && !props.colCharBanks[props.cellX][e.key.toLowerCase()]) {
     e.preventDefault()
     return
   }
