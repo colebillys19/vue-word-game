@@ -2,7 +2,9 @@ html {
   box-sizing: border-box;
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: inherit;
 }
 
@@ -11,19 +13,4 @@ body {
   margin: 0;
   min-width: 666px;
   padding: 0;
-}
-
-input {
-  border-color: #aaa;
-  border-left: none;
-  border-radius: 0;
-  border-top: none;
-  border-width: 1px;
-  font-family: monospace;
-  font-size: 16px;
-  height: 24px;
-  outline: none;
-  padding: 0;
-  text-align: center;
-  width: 24px;
 }

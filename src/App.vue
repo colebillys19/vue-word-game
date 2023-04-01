@@ -1,31 +1,37 @@
 <script setup>
 import { ref } from 'vue'
-
 import { useBoardStore } from './stores/board'
 import BoardBoard from './components/BoardBoard.vue'
 
 const boardStore = useBoardStore()
 const mainRef = ref(null)
 
-// boardStore.$subscribe((mutation) => {
-//   const { events: { key, newValue } } = mutation;
-//   if (key === 'lastInputIndices') {
-//     if (newValue[1] !== 25) {
-//       const nextCellIndices = [newValue[0], newValue[1] + 1].join('-');
-//       const targetInput = mainRef.value.querySelector(`[indices="${nextCellIndices}"]`);
-//       targetInput.focus();
-//       // targetInput.value = '';
-//       // boardStore.changeValueAtIndices('', nextCellIndices);
-//     } else {
-//       mainRef.value.querySelector(`[indices="${newValue.join('-')}"]`).blur();
-//       boardStore.setFocusedIndices('');
-//     }
-//   }
-// })
+boardStore.$subscribe((mutation) => {
+  const {
+    events: { key, newValue }
+  } = mutation
+  if (key === 'focusedX') {
+    if (newValue > -1) {
+      const targetCellInput = mainRef.value.querySelector(
+        `[indices="${newValue}-${boardStore.focusedY}"]`
+      )
+      targetCellInput.focus()
+    }
+  }
+  if (key === 'focusedY') {
+    if (newValue > -1) {
+      const targetCellInput = mainRef.value.querySelector(
+        `[indices="${boardStore.focusedX}-${newValue}"]`
+      )
+      targetCellInput.focus()
+    }
+  }
+})
 
 const handleMainClick = (target) => {
-  if (target.tagName !== 'INPUT') {
-    boardStore.setFocusedIndices('');
+  if (target.tagName !== 'INPUT' && boardStore.focusedX > -1) {
+    boardStore.setFocusedX(-1)
+    boardStore.setFocusedY(-1)
   }
 }
 </script>
@@ -33,15 +39,53 @@ const handleMainClick = (target) => {
 <template>
   <main @click="handleMainClick($event.target)" ref="mainRef">
     <BoardBoard />
+    <div>
+      <p>score: <span>{{ boardStore.score }}</span></p>
+      <button @click="boardStore.updateScore()">update score</button>
+      <button @click="boardStore.$reset()">clear</button>
+    </div>
   </main>
 </template>
 
 <style scoped>
-  main {
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-    padding-top: 24px;
-  }
+button {
+  background-color: rgba(100, 138, 180, 0.3);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 16px;
+  letter-spacing: 1px;
+  padding: 6px 12px;
+}
+
+button:first-of-type {
+  margin-right: 48px;
+}
+
+button:active {
+  background-color: white;
+}
+
+div {
+  align-items: center;
+  display: flex;
+}
+
+main {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 24px;
+  width: 100vw;
+}
+
+p {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 16px;
+  margin-right: 48px;
+}
+
+span {
+  font-family: monospace;
+  font-size: 24px;
+}
 </style>
