@@ -39,28 +39,53 @@ const handleMainClick = (target) => {
 <template>
   <main @click="handleMainClick($event.target)" ref="mainRef">
     <BoardBoard />
-    <button @click="boardStore.$reset()">clear</button>
+    <div>
+      <p>score: <span>{{ boardStore.score }}</span></p>
+      <button @click="boardStore.updateScore()">update score</button>
+      <button @click="boardStore.$reset()">clear</button>
+    </div>
   </main>
 </template>
 
 <style scoped>
+button {
+  background-color: rgba(100, 138, 180, 0.3);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 16px;
+  letter-spacing: 1px;
+  padding: 6px 12px;
+}
+
+button:first-of-type {
+  margin-right: 48px;
+}
+
+button:active {
+  background-color: white;
+}
+
+div {
+  align-items: center;
+  display: flex;
+}
+
 main {
   align-items: center;
   display: flex;
   flex-direction: column;
   height: 100vh;
-  padding-top: 24px;
+  padding: 24px;
   width: 100vw;
 }
 
-button {
-  background-color: rgba(100, 138, 180, 0.3);
+p {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  letter-spacing: 1px;
-  padding: 6px 12px;
+  font-size: 16px;
+  margin-right: 48px;
 }
 
-button:active {
-  background-color: white;
+span {
+  font-family: monospace;
+  font-size: 24px;
 }
 </style>

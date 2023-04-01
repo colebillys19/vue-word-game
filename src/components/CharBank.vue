@@ -31,7 +31,7 @@ const isFocusedRight = computed(() => boardStore.focusedX > 12)
 
 <template>
   <div class="container" :id="isVisible ? 'isVisible' : 'isHidden'" :style="isFocusedRight ? 'left: -96px;' : 'right: -96px;'">
-    <h1>{{ `Column ${boardStore.focusedX + 1}` }}</h1>
+    <h1>{{ `column ${boardStore.focusedX + 1}` }}</h1>
     <div v-for="rowsData in activeBankComputed" :key="rowsData.key">
       <span v-for="lilArr in rowsData.data" :key="lilArr[0]" :style="lilArr[1]">{{ lilArr[0] }}</span>
     </div>

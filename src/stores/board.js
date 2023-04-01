@@ -8,9 +8,19 @@ export const useBoardStore = defineStore('boardStore', {
     board: getBoard(),
     colCharBanks: getColCharBanks(),
     focusedX: -1,
-    focusedY: -1
+    focusedY: -1,
+    score: 0
   }),
   actions: {
+    updateScore() {
+      let counter = 0;
+      this.board.forEach(({ data }) => data.forEach(({ val }) => {
+        if (val) {
+          counter++
+        }
+      }))
+      this.score = counter
+    },
     setFocusedX(x) {
       this.focusedX = x
     },
