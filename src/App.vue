@@ -10,6 +10,14 @@ boardStore.$subscribe((mutation) => {
   const {
     events: { key, newValue }
   } = mutation
+  if (key === 'focusedX') {
+    if (newValue > -1) {
+      const targetCellInput = mainRef.value.querySelector(
+        `[indices="${newValue}-${boardStore.focusedY}"]`
+      )
+      targetCellInput.focus()
+    }
+  }
   if (key === 'focusedY') {
     if (newValue > -1) {
       const targetCellInput = mainRef.value.querySelector(
@@ -31,15 +39,28 @@ const handleMainClick = (target) => {
 <template>
   <main @click="handleMainClick($event.target)" ref="mainRef">
     <BoardBoard />
+    <button @click="boardStore.$reset()">clear</button>
   </main>
 </template>
 
 <style scoped>
 main {
+  align-items: center;
   display: flex;
+  flex-direction: column;
   height: 100vh;
-  justify-content: center;
   padding-top: 24px;
   width: 100vw;
+}
+
+button {
+  background-color: rgba(100, 138, 180, 0.3);
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  letter-spacing: 1px;
+  padding: 6px 12px;
+}
+
+button:active {
+  background-color: white;
 }
 </style>

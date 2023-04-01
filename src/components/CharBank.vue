@@ -43,6 +43,7 @@ h1 {
   color: rgb(100, 138, 180);
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 16px;
+  letter-spacing: 1px;
   margin: 0 0 10px 0;
 }
 

@@ -1,26 +1,26 @@
 <script setup>
 import { ref } from 'vue'
-import { useBoardStore } from '@/stores/board'
+// import { useBoardStore } from '@/stores/board'
 import BoardCell from './BoardCell.vue'
 
-const boardStore = useBoardStore()
+// const boardStore = useBoardStore()
 const rowRef = ref(null)
 
-const props = defineProps(['colCharBanks', 'rowData', 'rowIndex'])
+defineProps(['colCharBanks', 'rowData', 'rowIndex'])
 
-boardStore.$subscribe((mutation) => {
-  const {
-    events: { key, newValue }
-  } = mutation
-  if (key === 'focusedX' && boardStore.focusedY === props.rowIndex) {
-    if (newValue > -1) {
-      const targetCellInput = rowRef.value.querySelector(
-        `[indices="${newValue}-${boardStore.focusedY}"]`
-      )
-      targetCellInput.focus()
-    }
-  }
-})
+// boardStore.$subscribe((mutation) => {
+//   const {
+//     events: { key, newValue }
+//   } = mutation
+//   if (key === 'focusedX' && boardStore.focusedY === props.rowIndex) {
+//     if (newValue > -1) {
+//       const targetCellInput = rowRef.value.querySelector(
+//         `[indices="${newValue}-${boardStore.focusedY}"]`
+//       )
+//       targetCellInput.focus()
+//     }
+//   }
+// })
 
 const handleClick = (e) => {
   e.stopPropagation()

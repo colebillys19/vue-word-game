@@ -29,6 +29,7 @@ const handleClick = (e) => {
 <style scoped>
 section {
   display: inline-block;
+  margin-bottom: 24px;
   position: relative;
 }
 </style>
