@@ -6,28 +6,6 @@ import BoardBoard from './components/BoardBoard.vue'
 const boardStore = useBoardStore()
 const mainRef = ref(null)
 
-boardStore.$subscribe((mutation) => {
-  const {
-    events: { key, newValue }
-  } = mutation
-  if (key === 'focusedX') {
-    if (newValue > -1) {
-      const targetCellInput = mainRef.value.querySelector(
-        `[indices="${newValue}-${boardStore.focusedY}"]`
-      )
-      targetCellInput.focus()
-    }
-  }
-  if (key === 'focusedY') {
-    if (newValue > -1) {
-      const targetCellInput = mainRef.value.querySelector(
-        `[indices="${boardStore.focusedX}-${newValue}"]`
-      )
-      targetCellInput.focus()
-    }
-  }
-})
-
 const handleMainClick = (target) => {
   if (target.tagName !== 'INPUT' && boardStore.focusedX > -1) {
     boardStore.setFocusedX(-1)
@@ -40,7 +18,9 @@ const handleMainClick = (target) => {
   <main @click="handleMainClick($event.target)" ref="mainRef">
     <BoardBoard />
     <div>
-      <p>score: <span>{{ boardStore.score }}</span></p>
+      <p>
+        score: <span>{{ boardStore.score }}</span>
+      </p>
       <button @click="boardStore.updateScore()">update score</button>
       <button @click="boardStore.$reset()">clear</button>
     </div>

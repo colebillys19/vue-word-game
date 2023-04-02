@@ -7,7 +7,17 @@ import {
   VALID_KEYDOWN_CODES
 } from '@/misc/constants'
 
-const props = defineProps(['cellX', 'cellY', 'colCharBanks', 'modelValue', 'navObj'])
+const props = defineProps([
+  'blurInputs',
+  'cellX',
+  'cellY',
+  'colCharBanks',
+  'findFocus',
+  'findFocusX',
+  'findFocusY',
+  'modelValue',
+  'navObj'
+])
 defineEmits(['update:modelValue'])
 
 const boardStore = useBoardStore()
@@ -20,11 +30,8 @@ const handleClick = (e) => {
 }
 
 const handleFocus = () => {
-  if (boardStore.focusedX !== props.cellX) {
-    boardStore.setFocusedX(props.cellX)
-  }
-  if (boardStore.focusedY !== props.cellY) {
-    boardStore.setFocusedY(props.cellY)
+  if (boardStore.focusedX !== props.cellX || boardStore.focusedY !== props.cellY) {
+    props.findFocus(props.cellX, props.cellY)
   }
 }
 
@@ -32,13 +39,11 @@ const handleInput = (e) => {
   if (!VALID_INPUT_CHARS[e.data]) {
     e.preventDefault()
   } else {
-    // TODO: if valid input && true in bank
-    boardStore.setCharBankValue(props.cellX, e.data, false);
-    if (props.navObj.right) {
-      boardStore.setFocusedX(props.navObj.right)
+    boardStore.setCharBankValue(props.cellX, e.data, false)
+    if (props.navObj.right !== undefined) {
+      props.findFocusX(props.navObj.right)
     } else {
-      boardStore.setFocusedX(-1)
-      boardStore.setFocusedY(-1)
+      props.blurInputs()
     }
   }
 }
@@ -53,23 +58,23 @@ const handleKeydown = (e) => {
     e.preventDefault()
     switch (e.code) {
       case 'ArrowDown':
-        if (props.navObj.down) {
-          boardStore.setFocusedY(props.navObj.down)
+        if (props.navObj.down !== undefined) {
+          props.findFocusY(props.navObj.down)
         }
         break
       case 'ArrowLeft':
-        if (props.navObj.left) {
-          boardStore.setFocusedX(props.navObj.left)
+        if (props.navObj.left !== undefined) {
+          props.findFocusX(props.navObj.left)
         }
         break
       case 'ArrowRight':
-        if (props.navObj.right) {
-          boardStore.setFocusedX(props.navObj.right)
+        if (props.navObj.right !== undefined) {
+          props.findFocusX(props.navObj.right)
         }
         break
       case 'ArrowUp':
-        if (props.navObj.up) {
-          boardStore.setFocusedY(props.navObj.up)
+        if (props.navObj.up !== undefined) {
+          props.findFocusY(props.navObj.up)
         }
         break
       case 'Backspace': {
@@ -78,22 +83,20 @@ const handleKeydown = (e) => {
             // update bank and delete
             boardStore.setCharBankValue(props.cellX, e.target.value, true)
             e.target.value = ''
-            if (props.navObj.left) {
+            if (props.navObj.left !== undefined) {
               // shft | content | left
-              boardStore.setFocusedX(props.navObj.left)
+              props.findFocusX(props.navObj.left)
             } else {
               // shft | content | no left
-              boardStore.setFocusedX(-1)
-              boardStore.setFocusedY(-1)
+              props.blurInputs()
             }
           } else {
-            if (props.navObj.left) {
+            if (props.navObj.left !== undefined) {
               // shft | no content | left
-              boardStore.setFocusedX(props.navObj.left)
+              props.findFocusX(props.navObj.left)
             } else {
               // shft | no content | no left
-              boardStore.setFocusedX(-1)
-              boardStore.setFocusedY(-1)
+              props.blurInputs()
             }
           }
         } else {
@@ -104,21 +107,19 @@ const handleKeydown = (e) => {
             boardStore.setCharBankValue(props.cellX, e.target.value, true)
             e.target.value = ''
           } else {
-            if (props.navObj.left) {
+            if (props.navObj.left !== undefined) {
               // no shift | no content | left
-              boardStore.setFocusedX(props.navObj.left)
+              props.findFocusX(props.navObj.left)
             } else {
               // no shift | no content | no left
-              boardStore.setFocusedX(-1)
-              boardStore.setFocusedY(-1)
+              props.blurInputs()
             }
           }
         }
         break
       }
       case 'Escape':
-        boardStore.setFocusedX(-1)
-        boardStore.setFocusedY(-1)
+        props.blurInputs()
         break
       case 'Space':
         if (e.target.value) {
@@ -126,11 +127,10 @@ const handleKeydown = (e) => {
           boardStore.setCharBankValue(props.cellX, e.target.value, true)
           e.target.value = ''
         }
-        if (props.navObj.right) {
-          boardStore.setFocusedX(props.navObj.right)
+        if (props.navObj.right !== undefined) {
+          props.findFocusX(props.navObj.right)
         } else {
-          boardStore.setFocusedX(-1)
-          boardStore.setFocusedY(-1)
+          props.blurInputs()
         }
         break
     }
@@ -149,7 +149,11 @@ const handleKeydown = (e) => {
     return
   }
   // prevent input if char already used in column
-  if (VALID_INPUT_CHARS[e.key] && e.key.toLowerCase() !== e.target.value.toLowerCase() && !props.colCharBanks[props.cellX][e.key.toLowerCase()]) {
+  if (
+    VALID_INPUT_CHARS[e.key] &&
+    e.key.toLowerCase() !== e.target.value.toLowerCase() &&
+    !props.colCharBanks[props.cellX][e.key.toLowerCase()]
+  ) {
     e.preventDefault()
     return
   }
@@ -166,12 +170,15 @@ const handleKeydown = (e) => {
   <input
     maxlength="1"
     type="text"
-    :class="{ 'last-row':isLastRow, 'last-cell': isLastCell }"
+    :class="{ 'last-row': isLastRow, 'last-cell': isLastCell }"
     :indices="`${cellX}-${cellY}`"
     :value="modelValue"
     @click="handleClick($event)"
     @focus="handleFocus($event)"
-    @input="$emit('update:modelValue', $event.target.value); handleInput($event)"
+    @input="
+      $emit('update:modelValue', $event.target.value),
+      handleInput($event)
+    "
     @keydown="handleKeydown($event)"
   />
 </template>
@@ -213,12 +220,4 @@ input:focus {
 .last-cell {
   border-right: none;
 }
-
-/* input:hover:not(:focus) {
-  background-color: rgba(248, 89, 0, 0.3);
-} */
-
-/* .no-focus:hover:not(:focus) {
-  background-color: rgba(248, 89, 0, 0.3);
-} */
 </style>
