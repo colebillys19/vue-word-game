@@ -48,7 +48,7 @@ const handleInput = (e) => {
   }
 }
 
-const handleKeydown = (e) => {
+const handleKeydown = (e, emitter) => {
   if (!VALID_KEYDOWN_CODES[e.code]) {
     e.preventDefault()
     return
@@ -82,7 +82,7 @@ const handleKeydown = (e) => {
           if (e.target.value) {
             // update bank and delete
             boardStore.setCharBankValue(props.cellX, e.target.value, true)
-            e.target.value = ''
+            emitter('update:modelValue', '')
             if (props.navObj.left !== undefined) {
               // shft | content | left
               props.findFocusX(props.navObj.left)
@@ -105,7 +105,7 @@ const handleKeydown = (e) => {
             // no shift | content | no left
             // update bank and delete
             boardStore.setCharBankValue(props.cellX, e.target.value, true)
-            e.target.value = ''
+            emitter('update:modelValue', '')
           } else {
             if (props.navObj.left !== undefined) {
               // no shift | no content | left
@@ -125,7 +125,7 @@ const handleKeydown = (e) => {
         if (e.target.value) {
           // update bank and delete
           boardStore.setCharBankValue(props.cellX, e.target.value, true)
-          e.target.value = ''
+          emitter('update:modelValue', '')
         }
         if (props.navObj.right !== undefined) {
           props.findFocusX(props.navObj.right)
@@ -161,7 +161,7 @@ const handleKeydown = (e) => {
   if (ERASE_KEYDOWN_CODES[e.code] && e.target.value) {
     // update bank and delete
     boardStore.setCharBankValue(props.cellX, e.target.value, true)
-    e.target.value = ''
+    emitter('update:modelValue', '')
   }
 }
 </script>
@@ -179,7 +179,7 @@ const handleKeydown = (e) => {
       $emit('update:modelValue', $event.target.value),
       handleInput($event)
     "
-    @keydown="handleKeydown($event)"
+    @keydown="handleKeydown($event, $emit)"
   />
 </template>
 
